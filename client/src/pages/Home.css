@@ -37,15 +37,15 @@
     opacity: 1;
 }
 
-/* .hero__overlay {
-    /* position: absolute;
+.hero__overlay {
+    position: absolute;
     inset: 0;
-    /* background: linear-gradient(160deg,
+    background: linear-gradient(160deg,
             rgba(27, 43, 75, 0.65) 0%,
             rgba(13, 155, 138, 0.45) 50%,
-            rgba(27, 43, 75, 0.70) 100%); */
-/* z-index: 1;  
-} */
+            rgba(27, 43, 75, 0.70) 100%);
+    z-index: 1;
+}
 
 .hero__content {
     position: relative;
