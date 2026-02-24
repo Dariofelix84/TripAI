@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build
+client/build/
+
+# Environment
+.env
+
+# Database
+server/tripai.db
+
+# Videos (large files)
+client/public/videos/*.mp4
+client/public/videos/*.webm
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Yarn
+.yarn/
+server/tripai.db-shm
+server/tripai.db-wal

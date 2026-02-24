@@ -1,0 +1,10 @@
+{
+  "name": "tripai-root",
+  "private": true,
+  "scripts": {
+    "install-client": "cd client && npx -y yarn@1 install",
+    "build-client": "cd client && npx -y yarn@1 build",
+    "install-server": "cd server && npx -y yarn@1 install",
+    "start": "npm run install-client && npm run build-client && npm run install-server && node server/index.js"
+  }
+}
