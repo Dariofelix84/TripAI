@@ -9,12 +9,15 @@ import './Home.css';
 
 const DAY_OPTIONS = ['1-3', '4-7', '8-14', '15+'];
 
-const BUDGET_RANGES = [
-    { label: 'Econômico', min: 0, max: 5000 },
-    { label: 'Moderado', min: 5000, max: 15000 },
-    { label: 'Confortável', min: 15000, max: 30000 },
-    { label: 'Luxo', min: 30000, max: 100000 },
-];
+const MIN_BUDGET = 1000;
+const MAX_BUDGET = 100000;
+
+function getBudgetLabel(value) {
+    if (value <= 5000) return 'Econômico';
+    if (value <= 15000) return 'Moderado';
+    if (value <= 30000) return 'Confortável';
+    return 'Luxo';
+}
 
 function getDaysFromOption(opt, customDays) {
     if (opt === '15+') return customDays || 15;
@@ -26,16 +29,13 @@ export default function Home() {
     const [destination, setDestination] = useState('');
     const [selectedDays, setSelectedDays] = useState('4-7');
     const [customDays, setCustomDays] = useState(15);
-    const [budgetValue, setBudgetValue] = useState(35);
+    const [budgetValue, setBudgetValue] = useState(10000);
     const [loading, setLoading] = useState(false);
     const [videoLoaded, setVideoLoaded] = useState(false);
     const videoRef = useRef(null);
     const { token } = useAuth();
     const toast = useToast();
     const navigate = useNavigate();
-
-    const budgetIndex = budgetValue <= 25 ? 0 : budgetValue <= 50 ? 1 : budgetValue <= 75 ? 2 : 3;
-    const budget = BUDGET_RANGES[budgetIndex];
 
     const handleGenerate = async (e) => {
         e.preventDefault();
@@ -54,12 +54,13 @@ export default function Home() {
         setLoading(true);
         try {
             const days = getDaysFromOption(selectedDays, customDays);
+            const budgetLabel = getBudgetLabel(budgetValue);
             const res = await api.post('/trips/generate', {
                 destination: destination.trim(),
                 days,
-                budgetMin: budget.min,
-                budgetMax: budget.max,
-                budgetLabel: budget.label,
+                budgetMin: MIN_BUDGET,
+                budgetMax: budgetValue,
+                budgetLabel,
             });
 
             toast.success('Roteiro gerado com sucesso!');
@@ -68,9 +69,9 @@ export default function Home() {
                     itinerary: res.data.itinerary,
                     destination: destination.trim(),
                     days,
-                    budgetMin: budget.min,
-                    budgetMax: budget.max,
-                    budgetLabel: budget.label,
+                    budgetMin: MIN_BUDGET,
+                    budgetMax: budgetValue,
+                    budgetLabel,
                 },
             });
         } catch (err) {
@@ -154,20 +155,21 @@ export default function Home() {
                             <div className="form-card__budget-header">
                                 <label className="label-uppercase">Orçamento estimado</label>
                                 <span className="form-card__budget-value">
-                                    R$ {budget.min.toLocaleString('pt-BR')} - R$ {budget.max.toLocaleString('pt-BR')}
+                                    R$ {budgetValue.toLocaleString('pt-BR')}
                                 </span>
                             </div>
                             <input
                                 type="range"
-                                min="0"
-                                max="100"
+                                min={MIN_BUDGET}
+                                max={MAX_BUDGET}
+                                step="1000"
                                 value={budgetValue}
                                 onChange={(e) => setBudgetValue(parseInt(e.target.value))}
                                 className="form-card__slider"
                             />
                             <div className="form-card__budget-labels">
-                                <span>Econômico</span>
-                                <span>Luxo</span>
+                                <span>R$ 1.000</span>
+                                <span>R$ 100.000</span>
                             </div>
                         </div>
 

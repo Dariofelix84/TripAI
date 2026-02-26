@@ -31,6 +31,12 @@
     font-size: 20px;
     font-weight: 800;
     color: var(--navy);
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+.header__brand:hover {
+    transform: scale(1.15);
 }
 
 .header--dark .header__brand {
